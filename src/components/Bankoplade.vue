@@ -2,7 +2,8 @@
 import { ref } from 'vue'
 
 defineProps({
-  rows: Array
+  rows: Array,
+  isStarted: Boolean
 })
 
 </script>
@@ -12,7 +13,8 @@ defineProps({
     <tbody>
       <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
         <td v-for="(cell, cellIndex) in row" :key="cellIndex" :class="{ bingo: cell.isBingo, drawn: cell.isDrawn }">
-          <input type="text" v-model="cell.number" />
+          <input v-if="!isStarted" type="text" v-model="cell.number" />
+          <span v-if="isStarted">{{ cell.number }}</span>
         </td>
       </tr>
     </tbody>
@@ -20,13 +22,22 @@ defineProps({
 </template>
 
 <style scoped>
+td span {
+  display: inline-block;
+  color: red;
+  border-radius: 50%;
+  box-shadow: 1px 1px 1px red, -1px -1px 1px red, 1px -1px 1px red, -1px 1px 1px red;
+  width: 1.5em;
+  height: 1.5em;
+}
 
-.drawn input {
+.drawn span {
   background-color: yellow;
 }
 
-.bingo input {
+.bingo span {
   background-color: hotpink;
+  color: peachpuff;
 }
 
 table {

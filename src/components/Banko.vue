@@ -24,6 +24,7 @@ function toggleGameStatus() {
     var ok = confirm('Er du sikker på at du vil stoppe spillet?');
     if (ok) {
       boards.value = [];
+      numberList.value = [];
       started.value = false;
     }
   }
@@ -52,7 +53,9 @@ function checkForBingo() {
   for (let plade of boards.value) {
     for (let row of plade.rows) {
       for (let cell of row) {
-        if (numberList.value.includes(cell.number)) {
+        const theList = numberList.value.slice().map(String);
+
+        if (theList.includes(cell.number)) {
           cell.isDrawn = true;
         }
         else {
@@ -83,7 +86,7 @@ function checkForBingo() {
         })">Tilføj Bankoplade</button>
     <button v-if="boards?.length > 0" @click="toggleGameStatus()">{{ started ? 'Stop Spil' : 'Start Spil' }}</button>
   </div>
-  <div v-if="started">
+  <div v-if="started" >
     <input type="number" v-model="newNumber" />
     <button @click="addNumber()">Udtræk nummer</button>
     <ul class="numberList">
@@ -97,7 +100,7 @@ function checkForBingo() {
           <h3>Plade {{ index + 1 }}</h3>
           <button v-if="!started" @click="boards.splice(index, 1)">Slet</button>
         </div>
-        <Bankoplade :rows="plade.rows" />
+        <Bankoplade :rows="plade.rows" :isStarted="started" />
       </li>
     </ul>
   </div>
@@ -126,6 +129,13 @@ function checkForBingo() {
 .pladeBox {
   display: flex;
   justify-content: space-between;
+}
+
+input[type="number"] {
+  width: 4em;
+  height: 2.5em;
+  text-align: center;
+  border-radius: 0.5em;
 }
 
 button {
