@@ -11,8 +11,8 @@ defineProps({
   <table>
     <tbody>
       <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
-        <td v-for="(number, numberIndex) in row" :key="numberIndex">
-          <input type="text" v-model="rows[rowIndex][numberIndex]" />
+        <td v-for="(cell, cellIndex) in row" :key="cellIndex" :class="{ bingo: cell.isBingo, drawn: cell.isDrawn }">
+          <input type="text" v-model="cell.number" />
         </td>
       </tr>
     </tbody>
@@ -20,6 +20,15 @@ defineProps({
 </template>
 
 <style scoped>
+
+.drawn input {
+  background-color: yellow;
+}
+
+.bingo input {
+  background-color: hotpink;
+}
+
 table {
   width: 100%;
 }

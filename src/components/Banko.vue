@@ -13,9 +13,9 @@ const boards = ref([])
 
 function addBankoplade(newPlade) {
   if (newPlade.rows.length === 3 && newPlade.rows.every(row => row.length === 5)) {
-    boards.value.push(newPlade)
+    boards.value.push(newPlade);
   } else {
-    console.error('Invalid Bankoplade format')
+    console.error('Invalid Bankoplade format');
   }
 }
 
@@ -34,8 +34,40 @@ function toggleGameStatus() {
 
 function addNumber() {
   if (newNumber.value > 0 && !numberList.value.includes(newNumber.value)) {
-    numberList.value.push(newNumber.value);
+    numberList.value.unshift(newNumber.value);
     newNumber.value = 0;
+    checkForBingo();
+  }
+}
+
+function removeNumber(index) {
+  const ok = confirm(`Vil du fjerne nummeret ${numberList.value[index]} fra udtrækningen?`);
+
+  if (ok) {
+    numberList.value.splice(index, 1);
+  }
+}
+
+function checkForBingo() {
+  for (let plade of boards.value) {
+    for (let row of plade.rows) {
+      for (let cell of row) {
+        if (numberList.value.includes(cell.number)) {
+          cell.isDrawn = true;
+        }
+        else {
+          cell.isDrawn = false;
+        }
+      }
+    }
+    for (let row of plade.rows) {
+      if (row.every(cell => cell.isDrawn)) {
+        row.forEach(cell => cell.isBingo = true);
+      }
+      else {
+        row.forEach(cell => cell.isBingo = false);
+      }
+    }
   }
 }
 </script>
@@ -43,15 +75,19 @@ function addNumber() {
 <template>
   <div class="buttonBox">
     <button v-if="!started" @click="addBankoplade({
-      rows: new Array(3).fill(0).map(() => new Array(5).fill(0))
-    })">Tilføj Bankoplade</button>
+      rows: [
+        [{ number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }],
+        [{ number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }],
+        [{ number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }]
+      ]
+        })">Tilføj Bankoplade</button>
     <button v-if="boards?.length > 0" @click="toggleGameStatus()">{{ started ? 'Stop Spil' : 'Start Spil' }}</button>
   </div>
   <div v-if="started">
     <input type="number" v-model="newNumber" />
     <button @click="addNumber()">Udtræk nummer</button>
     <ul class="numberList">
-      <li v-for="(number, index) in numberList" :key="index">{{ number }}</li>
+      <li @click="removeNumber(index)" v-for="(number, index) in numberList" :key="index">{{ number }}</li>
     </ul>
   </div>
   <div>
@@ -65,7 +101,6 @@ function addNumber() {
       </li>
     </ul>
   </div>
-
 </template>
 
 <style scoped>
