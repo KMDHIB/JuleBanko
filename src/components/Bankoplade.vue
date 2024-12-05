@@ -20,5 +20,13 @@ defineProps({
 </template>
 
 <style scoped>
+table {
+  width: 100%;
+}
 
+input {
+  width: 2em;
+  height: 2em;
+  text-align: center;
+}
 </style>
