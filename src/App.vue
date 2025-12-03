@@ -52,7 +52,13 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
 
+@media (max-width: 600px) {
+  .headingBox {
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 
 h1 {

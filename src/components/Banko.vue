@@ -23,7 +23,7 @@ function toggleGameStatus() {
   if (started.value === true) {
     var ok = confirm('Er du sikker på at du vil stoppe spillet?');
     if (ok) {
-      boards.value = [];
+      /* boards.value = []; */
       numberList.value = [];
       started.value = false;
     }
