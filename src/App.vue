@@ -1,30 +1,21 @@
 <script setup>
-import Banko from './components/Banko.vue'
-</script>
-
-<script>
 import { ref, onMounted } from 'vue'
+import Banko from './components/Banko.vue'
 
-export default {
-  setup() {
-    const updateAvailable = ref(false)
-    let swRegistration = null
+const updateAvailable = ref(false)
+let swRegistration = null
 
-    function applyUpdate() {
-      if (!swRegistration || !swRegistration.waiting) return
-      swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' })
-    }
-
-    onMounted(() => {
-      window.addEventListener('swWaiting', (e) => {
-        swRegistration = e.detail.registration
-        updateAvailable.value = true
-      })
-    })
-
-    return { updateAvailable, applyUpdate }
-  }
+function applyUpdate() {
+  if (!swRegistration || !swRegistration.waiting) return
+  swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' })
 }
+
+onMounted(() => {
+  window.addEventListener('swWaiting', (e) => {
+    swRegistration = e.detail.registration
+    updateAvailable.value = true
+  })
+})
 </script>
 
 <template>
