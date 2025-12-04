@@ -13,7 +13,7 @@ defineProps({
     <tbody>
       <tr v-for="(row, rowIndex) in rows" :key="rowIndex">
         <td v-for="(cell, cellIndex) in row" :key="cellIndex" :class="{ bingo: cell.isBingo, drawn: cell.isDrawn }">
-          <input v-if="!isStarted" type="text" v-model="cell.number" />
+          <input v-if="!isStarted" type="text" v-model="cell.number" @focus="cell.number = ''" />
           <span v-if="isStarted">{{ cell.number }}</span>
         </td>
       </tr>

@@ -8,7 +8,7 @@ defineProps({
 
 const started = ref(false)
 const numberList = ref([])
-const newNumber = ref(0);
+const newNumber = ref('');
 const boards = ref([])
 
 function addBankoplade(newPlade) {
@@ -34,9 +34,10 @@ function toggleGameStatus() {
 }
 
 function addNumber() {
-  if (newNumber.value > 0 && !numberList.value.includes(newNumber.value)) {
-    numberList.value.unshift(newNumber.value);
-    newNumber.value = 0;
+  const num = parseInt(newNumber.value);
+  if (num > 0 && !numberList.value.includes(num)) {
+    numberList.value.unshift(num);
+    newNumber.value = '';
     checkForBingo();
   }
 }
@@ -79,15 +80,15 @@ function checkForBingo() {
   <div class="buttonBox">
     <button v-if="!started" @click="addBankoplade({
       rows: [
-        [{ number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }],
-        [{ number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }],
-        [{ number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }, { number: 0, isDrawn: false, isBingo: false }]
+        [{ number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }],
+        [{ number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }],
+        [{ number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }, { number: '', isDrawn: false, isBingo: false }]
       ]
         })">Tilføj Bankoplade</button>
     <button v-if="boards?.length > 0" @click="toggleGameStatus()">{{ started ? 'Stop Spil' : 'Start Spil' }}</button>
   </div>
   <div v-if="started" >
-    <input type="number" v-model="newNumber" />
+    <input type="number" v-model="newNumber" @focus="newNumber = ''" placeholder="Indtast nummer" />
     <button @click="addNumber()">Udtræk nummer</button>
     <ul class="numberList">
       <li @click="removeNumber(index)" v-for="(number, index) in numberList" :key="index">{{ number }}</li>
