@@ -1,7 +1,7 @@
 const CACHE_NAME = 'julebanko-' + new Date().getTime();
 
 self.addEventListener('install', (event) => {
-  self.skipWaiting();
+  // Don't call skipWaiting here - let the page decide when to update
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       // Cache will be populated on-demand during fetch
@@ -59,6 +59,7 @@ self.addEventListener('fetch', (event) => {
 // Listen for skipWaiting message from the page
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
+    console.log('[SW] Received SKIP_WAITING message, activating new service worker');
     self.skipWaiting();
   }
 });

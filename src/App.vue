@@ -7,11 +7,13 @@ let swRegistration = null
 
 function applyUpdate() {
   if (!swRegistration || !swRegistration.waiting) return
+  console.log('[App] Sending SKIP_WAITING message to service worker')
   swRegistration.waiting.postMessage({ type: 'SKIP_WAITING' })
 }
 
 onMounted(() => {
   window.addEventListener('swWaiting', (e) => {
+    console.log('[App] Update available event received')
     swRegistration = e.detail.registration
     updateAvailable.value = true
   })
